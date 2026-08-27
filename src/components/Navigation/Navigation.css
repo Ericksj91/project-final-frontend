@@ -1,0 +1,97 @@
+.menu {
+  font-family: "Inter", Arial, sans-serif;
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 1.4;
+  display: flex;
+  align-items: center;
+  column-gap: 40px;
+}
+
+.menu__inicio {
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #070707;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.menu__inicio:hover {
+  color: #8a8c91;
+}
+
+.menu__saved-movies {
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #0c0c0c;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.menu__saved-movies:hover {
+  color: #8a8c91;
+}
+
+.menu__button {
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #3e68ff;
+  background-color: #ffffff;
+  border: 1.5px solid #3e68ff;
+  border-radius: 100px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.menu__button:hover {
+  background-color: #3e68ff;
+  color: #ffffff;
+}
+
+.menu__button:active {
+  background-color: #2d4fd1;
+  border-color: #2d4fd1;
+}
+
+@media screen and (max-width: 1024px) {
+  .menu {
+    font-size: 16px;
+  }
+
+  .menu__inicio {
+    font-size: 16px;
+  }
+
+  .menu__saved-movies {
+    font-size: 16px;
+  }
+
+  .menu__button {
+    font-size: 14px;
+    padding: 6px 16px;
+  }
+}
+
+@media screen and (max-width: 544px) {
+  .menu {
+    font-size: 14px;
+  }
+
+  .menu__inicio {
+    font-size: 14px;
+  }
+
+  .menu__saved-movies {
+    font-size: 14px;
+  }
+  .menu__button {
+    font-size: 14px;
+    padding: 6px 16px;
+  }
+}

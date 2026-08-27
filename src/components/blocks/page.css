@@ -1,0 +1,25 @@
+.page {
+  display: flex;
+  flex-direction: column;
+}
+
+.page__content {
+  padding: 0 40px;
+  /*background-color: rgb(242, 236, 236);*/
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.page__section {
+  width: 100%;
+  max-width: 1200px;
+  box-sizing: border-box;
+  position: relative;
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 720px) {
+  .page__content {
+    padding: 0 20px;
+  }
+}

@@ -1,0 +1,77 @@
+.saved-movies {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.saved-movies__title {
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 28px;
+  font-weight: 900;
+  color: #1a1b22;
+  margin: 0;
+}
+
+.saved-movies__description {
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 14px;
+  color: #8b8b8b;
+  margin: 0;
+}
+
+.saved-movies__no-articles {
+  font-family: "Inter", Arial, sans-serif;
+  text-align: center;
+  font-size: 16px;
+  color: #8b8b8b;
+  padding: 60px 20px;
+}
+
+.saved-movies__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  padding: 0 20px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+@media screen and (max-width: 1024px) {
+  .saved-movies__title {
+    font-size: 28px;
+    text-align: center;
+    padding: 0 20px;
+  }
+
+  .saved-movies__description {
+    font-size: 16px;
+    text-align: center;
+    padding: 0 10px 20px;
+  }
+
+  .saved-movies__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 544px) {
+  .saved-movies__title {
+    font-size: 22px;
+    text-align: center;
+    padding: 0 20px;
+  }
+
+  .saved-movies__description {
+    font-size: 14px;
+    text-align: center;
+    padding: 0 10px 20px;
+  }
+  .saved-movies__grid {
+    grid-template-columns: 1fr;
+  }
+}
