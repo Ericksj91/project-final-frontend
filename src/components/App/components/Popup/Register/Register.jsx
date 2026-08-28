@@ -1,10 +1,12 @@
 import { useState } from "react";
 
 function Register({ onLoginClick, onSubmit, isLoading }) {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [formValid, setFormValid] = useState(false);
+  const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
@@ -16,6 +18,12 @@ function Register({ onLoginClick, onSubmit, isLoading }) {
       confirmInput.setCustomValidity("");
     }
   }
+
+  const handleNameChange = (e) => {
+    setName(e.target.value);
+    setFormValid(e.target.form.checkValidity());
+    setNameError(e.target.validationMessage);
+  };
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -40,7 +48,7 @@ function Register({ onLoginClick, onSubmit, isLoading }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({ name, password });
+    onSubmit({ name, email, password });
   };
 
   return (
@@ -51,6 +59,25 @@ function Register({ onLoginClick, onSubmit, isLoading }) {
       noValidate
       onSubmit={handleSubmit}
     >
+      <label className="popup__field">
+        <span className="popup__field-label">Nombre</span>
+        <input
+          className="popup__input popup__input_type_name"
+          value={name}
+          onChange={handleNameChange}
+          name="name"
+          id="register-name"
+          placeholder="Nombre"
+          type="text"
+          minLength="5"
+          required
+        />
+        <span
+          className={`popup__input-error ${nameError ? "popup__input-error_active" : ""}`}
+        >
+          {nameError}
+        </span>
+      </label>
       <label className="popup__field">
         <span className="popup__field-label">Correo Electrónico</span>
         <input
