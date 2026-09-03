@@ -1,0 +1,6 @@
+.header {
+  min-height: 70px;
+  border-bottom: 1px solid #000000;
+  display: flex;
+  justify-content: space-between;
+}
