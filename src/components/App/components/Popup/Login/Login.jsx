@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function Login({ onSubmit, isLoading, onRegisterClick }) {
+function Login({ onSubmit, isLoading, onRegisterClick, loginError }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [formValid, setFormValid] = useState(false);
@@ -33,6 +33,7 @@ function Login({ onSubmit, isLoading, onRegisterClick }) {
       onSubmit={handleSubmit}
     >
       <label className="popup__field">
+        {loginError && <p className="login__error">{loginError}</p>}
         <span className="popup__field-label">Correo Electrónico</span>
         <input
           className="popup__input popup__input_type_email"
