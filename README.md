@@ -4,6 +4,13 @@ Aplicación web para buscar películas utilizando la API de [TMDB (The Movie Dat
 
 Este repositorio corresponde al **frontend** del proyecto.
 
+Este repositorio corresponde al **frontend** del proyecto.
+
+## 🔗 Enlaces del proyecto desplegado
+
+- **Frontend:** [https://moviesexplorer.okzk.com] [https://www.moviesexplorer.okzk.com]
+- **Backend / API:** [https://api.moviesexplorer.okzk.com]
+
 ## 📋 Descripción
 
 Movies Explorer permite buscar películas por nombre, ver los resultados con su información básica (imagen, título, fecha de estreno y descripción), guardarlas en una lista personal de favoritos sincronizada con un backend propio, y gestionar una cuenta de usuario con inicio de sesión, registro y cierre de sesión reales.
@@ -63,3 +70,11 @@ Movies Explorer permite buscar películas por nombre, ver los resultados con su 
 ```
 
 > **Nota:** la URL del backend (`BASE_URL`) está configurada en `utils/auth.js`, apuntando al backend ya desplegado en producción (`https://api.moviesexplorer.okzk.com`).
+
+## 🌐 Backend
+
+Repositorio del backend: [project-final-backend](https://github.com/Ericksj91/project-final-backend)
+
+## 👤 Autor
+
+Erick — Proyecto final del bootcamp de desarrollo web de TripleTen.
