@@ -1,6 +1,12 @@
 import { useState } from "react";
 
-function Login({ onSubmit, isLoading, onRegisterClick, loginError }) {
+function Login({
+  onSubmit,
+  isLoading,
+  onRegisterClick,
+  loginError,
+  onClearError,
+}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [formValid, setFormValid] = useState(false);
@@ -11,12 +17,14 @@ function Login({ onSubmit, isLoading, onRegisterClick, loginError }) {
     setEmail(e.target.value);
     setFormValid(e.target.form.checkValidity());
     setEmailError(e.target.validationMessage);
+    onClearError();
   };
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
     setFormValid(e.target.form.checkValidity());
     setPasswordError(e.target.validationMessage);
+    onClearError();
   };
 
   const handleSubmit = (e) => {

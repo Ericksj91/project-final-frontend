@@ -6,14 +6,14 @@ import Card from "../Card/Card";
 import "./SavedMovies.css";
 import { SavedArticlesContext } from "../../contexts/SavedArticlesContext";
 
-function SavedMovies() {
+function SavedMovies({ onLogoutClick }) {
   const { savedArticles, handleSaveArticle } = useContext(SavedArticlesContext);
 
   return (
     <div className="page__content">
       <header className="header page__section">
         <Logo />
-        <Navigation />
+        <Navigation onLogoutClick={onLogoutClick} />
       </header>
       <div className="saved-movies page__section">
         <h1 className="saved-movies__title">Películas guardadas</h1>
@@ -28,10 +28,10 @@ function SavedMovies() {
           <div className="saved-movies__grid">
             {savedArticles.map((article) => (
               <Card
-                key={article.id}
+                key={article._id}
                 article={article}
                 buttonType="delete"
-                onButtonClick={() => handleSaveArticle(article)}
+                onButtonClick={() => handleSaveArticle({ id: article.movieId })}
               />
             ))}
           </div>

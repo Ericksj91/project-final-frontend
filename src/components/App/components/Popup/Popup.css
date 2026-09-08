@@ -170,6 +170,22 @@
   margin-bottom: 6px;
 }
 
+.login__error {
+  margin: auto;
+  margin-bottom: 14px;
+  padding: 10px;
+  background-color: #e3dfdf;
+  border: 1px solid #ede7e7;
+  border-radius: 6px;
+  font-family: "Inter", Arial, sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 100%;
+  text-align: center;
+  color: #3e68ff;
+  max-width: 360px;
+}
+
 @media screen and (max-width: 1024px) {
   .popup {
     bottom: 112px;
@@ -213,7 +229,8 @@
 
 @media screen and (max-width: 544px) {
   .popup__close {
-    right: -12px;
+    top: -50px;
+    right: -10px;
   }
 
   .popup__content {

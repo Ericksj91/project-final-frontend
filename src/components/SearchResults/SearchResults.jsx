@@ -30,7 +30,7 @@ function SearchResults({
               buttonType="save"
               onButtonClick={() => handleSaveArticle(article)}
               isSaved={savedArticles.some(
-                (eachArticle) => eachArticle.id === article.id,
+                (eachArticle) => eachArticle.movieId === article.id,
               )}
             />
           ))}

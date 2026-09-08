@@ -16,7 +16,8 @@ import Login from "./components/Popup/Login/Login";
 import Register from "./components/Popup/Register/Register";
 import InfoTooltip from "../InfoToolTip/InfoToolTip";
 import * as auth from "../../utils/auth";
-import { setToken, getToken } from "../../utils/token";
+import * as moviesApi from "../../utils/moviesApi";
+import { setToken, getToken, removeToken } from "../../utils/token";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
@@ -28,12 +29,10 @@ function App() {
   const [isInfoToolTipOpen, setIsInfoToolTipOpen] = useState(false);
   const [isSuccess, setIsSucces] = useState(false);
   const [loginError, setLoginError] = useState("");
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
-  const [savedArticles, setSavedArticles] = useState(() => {
-    const saved = localStorage.getItem("savedArticles");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [savedArticles, setSavedArticles] = useState([]);
 
   const handleRegister = ({ name, password, email }) => {
     setIsLoading(true);
@@ -42,7 +41,7 @@ function App() {
       .then(() => {
         setIsSucces(true);
         setIsInfoToolTipOpen(true);
-        handleOpenPopup(loginPopup);
+        handleOpenPopup("login");
       })
       .catch((err) => {
         setIsSucces(false);
@@ -72,6 +71,7 @@ function App() {
         setIsLoggedIn(true);
         const redirectPath = location.state?.from || "/";
         navigate(redirectPath);
+        handleClosePopup();
       })
       .catch((err) => {
         setLoginError("Correo electrónico o contraseña incorrectos");
@@ -87,9 +87,10 @@ function App() {
     children: (
       <Login
         onSubmit={handleLogin}
-        onRegisterClick={() => handleOpenPopup(registerPopup)}
+        onRegisterClick={() => handleOpenPopup("register")}
         isLoading={isLoading}
         loginError={loginError}
+        onClearError={() => setLoginError("")}
       />
     ),
   };
@@ -98,7 +99,7 @@ function App() {
     children: (
       <Register
         onSubmit={handleRegister}
-        onLoginClick={() => handleOpenPopup(loginPopup)}
+        onLoginClick={() => handleOpenPopup("login")}
         isLoading={isLoading}
       />
     ),
@@ -107,6 +108,7 @@ function App() {
   useEffect(() => {
     const jwt = getToken();
     if (!jwt) {
+      setIsCheckingAuth(false);
       return;
     }
     auth
@@ -117,33 +119,81 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setIsCheckingAuth(false);
       });
   }, []);
 
-  function handleOpenPopup(popup) {
-    setPopup(popup);
+  function handleOpenPopup(type) {
+    setPopup(type);
   }
 
   function handleClosePopup() {
     setPopup(null);
+    setLoginError("");
   }
 
   function handleInfoToolTipClose() {
     setIsInfoToolTipOpen(false);
   }
 
-  function handleSaveArticle(article) {
+  function handleLogout() {
+    removeToken();
+    setCurrentUser({});
+    setIsLoggedIn(false);
+    navigate("/");
+  }
+
+  function handleSaveArticle(movie) {
+    const token = getToken();
     const isAlreadySaved = savedArticles.some(
-      (eachArticle) => eachArticle.id === article.id,
+      (saved) => saved.movieId === movie.id,
     );
+
     if (isAlreadySaved) {
-      setSavedArticles((prevArticles) =>
-        prevArticles.filter((eachArticle) => eachArticle.id !== article.id),
+      const savedMovie = savedArticles.find(
+        (saved) => saved.movieId === movie.id,
       );
+      moviesApi
+        .deleteMovie(savedMovie._id, token)
+        .then(() => {
+          setSavedArticles((prev) =>
+            prev.filter((saved) => saved._id !== savedMovie._id),
+          );
+        })
+        .catch((err) => console.log(err));
     } else {
-      setSavedArticles((newArticle) => [article, ...newArticle]);
+      const movieData = {
+        movieId: movie.id,
+        title: movie.title,
+        description: movie.description,
+        date: movie.date,
+        source: "TMDB",
+        image: movie.image,
+        link: `https://www.themoviedb.org/movie/${movie.id}`,
+      };
+      moviesApi
+        .saveMovie(movieData, token)
+        .then((response) => {
+          setSavedArticles((prev) => [response.data, ...prev]);
+        })
+        .catch((err) => console.log(err));
     }
   }
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      return;
+    }
+    const token = getToken();
+    moviesApi
+      .getMovies(token)
+      .then((response) => {
+        setSavedArticles(response.data);
+      })
+      .catch((err) => console.log(err));
+  }, [isLoggedIn]);
 
   return (
     <>
@@ -156,7 +206,10 @@ function App() {
               path="/"
               element={
                 <div className="page__content">
-                  <Header onLoginClick={() => handleOpenPopup(loginPopup)} />
+                  <Header
+                    onLoginClick={() => handleOpenPopup("login")}
+                    onLogoutClick={handleLogout}
+                  />
                   <Main />
                   <Footer />
                 </div>
@@ -167,24 +220,35 @@ function App() {
               element={
                 <ProtectedRoute
                   anonymous={false}
-                  onOpenLoginPopup={() => handleOpenPopup(loginPopup)}
+                  onOpenLoginPopup={() => handleOpenPopup("login")}
+                  isCheckingAuth={isCheckingAuth}
                 >
-                  <SavedMovies />
+                  <SavedMovies onLogoutClick={handleLogout} />
                 </ProtectedRoute>
               }
             />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
-          {popup && (
+          {popup === "login" && (
             <Popup
               onClose={handleClosePopup}
-              title={popup.title}
-              className={popup.className}
+              title={loginPopup.title}
               onCloseClick={handleClosePopup}
             >
-              {popup.children}
+              {loginPopup.children}
             </Popup>
           )}
+
+          {popup === "register" && (
+            <Popup
+              onClose={handleClosePopup}
+              title={registerPopup.title}
+              onCloseClick={handleClosePopup}
+            >
+              {registerPopup.children}
+            </Popup>
+          )}
+
           {isInfoToolTipOpen && (
             <InfoTooltip
               isSuccess={isSuccess}
