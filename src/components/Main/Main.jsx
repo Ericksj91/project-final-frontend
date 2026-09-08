@@ -27,7 +27,6 @@ function Main() {
         if (data.results.length === 0) {
           setStatus("empty");
         } else {
-          console.log(data.results[0]);
           const formattedArticles = data.results.map((item) => ({
             id: item.id,
             image: `https://image.tmdb.org/t/p/w500${item.poster_path}`,

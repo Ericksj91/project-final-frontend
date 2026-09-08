@@ -29,7 +29,10 @@ function App() {
   const [isInfoToolTipOpen, setIsInfoToolTipOpen] = useState(false);
   const [isSuccess, setIsSucces] = useState(false);
   const [loginError, setLoginError] = useState("");
-  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const [movieError, setMovieError] = useState("");
+  const [isCheckingAuth, setIsCheckingAuth] = useState(() =>
+    Boolean(getToken()),
+  );
   const navigate = useNavigate();
   const location = useLocation();
   const [savedArticles, setSavedArticles] = useState([]);
@@ -43,10 +46,9 @@ function App() {
         setIsInfoToolTipOpen(true);
         handleOpenPopup("login");
       })
-      .catch((err) => {
+      .catch(() => {
         setIsSucces(false);
         setIsInfoToolTipOpen(true);
-        console.log(err);
       })
       .finally(() => {
         setIsLoading(false);
@@ -55,7 +57,7 @@ function App() {
 
   const handleLogin = ({ email, password }) => {
     if (!email || !password) {
-      setLoginError(true);
+      setLoginError("Por favor, completa todos los campos");
       return;
     }
     setIsLoading(true);
@@ -73,9 +75,8 @@ function App() {
         navigate(redirectPath);
         handleClosePopup();
       })
-      .catch((err) => {
+      .catch(() => {
         setLoginError("Correo electrónico o contraseña incorrectos");
-        console.log(err);
       })
       .finally(() => {
         setIsLoading(false);
@@ -108,7 +109,6 @@ function App() {
   useEffect(() => {
     const jwt = getToken();
     if (!jwt) {
-      setIsCheckingAuth(false);
       return;
     }
     auth
@@ -117,8 +117,9 @@ function App() {
         setCurrentUser(currentUser);
         setIsLoggedIn(true);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
+        removeToken();
+        setIsLoggedIn(false);
       })
       .finally(() => {
         setIsCheckingAuth(false);
@@ -162,7 +163,9 @@ function App() {
             prev.filter((saved) => saved._id !== savedMovie._id),
           );
         })
-        .catch((err) => console.log(err));
+        .catch(() => {
+          setMovieError("Error al eliminar la película.");
+        });
     } else {
       const movieData = {
         movieId: movie.id,
@@ -178,7 +181,9 @@ function App() {
         .then((response) => {
           setSavedArticles((prev) => [response.data, ...prev]);
         })
-        .catch((err) => console.log(err));
+        .catch(() => {
+          setMovieError("Error al guardar la película.");
+        });
     }
   }
 
@@ -192,14 +197,16 @@ function App() {
       .then((response) => {
         setSavedArticles(response.data);
       })
-      .catch((err) => console.log(err));
+      .catch(() => {
+        setMovieError("Error al obtener las películas guardadas.");
+      });
   }, [isLoggedIn]);
 
   return (
     <>
       <CurrentUserContext.Provider value={{ currentUser, isLoggedIn }}>
         <SavedArticlesContext.Provider
-          value={{ handleSaveArticle, savedArticles }}
+          value={{ handleSaveArticle, savedArticles, movieError }}
         >
           <Routes>
             <Route

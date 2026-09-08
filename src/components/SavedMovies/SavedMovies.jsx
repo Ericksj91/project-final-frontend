@@ -7,7 +7,8 @@ import "./SavedMovies.css";
 import { SavedArticlesContext } from "../../contexts/SavedArticlesContext";
 
 function SavedMovies({ onLogoutClick }) {
-  const { savedArticles, handleSaveArticle } = useContext(SavedArticlesContext);
+  const { savedArticles, handleSaveArticle, movieError } =
+    useContext(SavedArticlesContext);
 
   return (
     <div className="page__content">
@@ -20,6 +21,8 @@ function SavedMovies({ onLogoutClick }) {
         <p className="saved-movies__description">
           Lista de películas guardadas.
         </p>
+        {movieError && <p className="saved-movies__error">{movieError}</p>}
+
         {savedArticles.length === 0 ? (
           <p className="saved-movies__no-articles">
             No hay películas guardadas. Guarda algunas para verlas aquí.
