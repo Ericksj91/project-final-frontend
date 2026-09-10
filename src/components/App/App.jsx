@@ -206,7 +206,7 @@ function App() {
     <>
       <CurrentUserContext.Provider value={{ currentUser, isLoggedIn }}>
         <SavedArticlesContext.Provider
-          value={{ handleSaveArticle, savedArticles, movieError }}
+          value={{ handleSaveArticle, savedArticles, movieError, setMovieError }}
         >
           <Routes>
             <Route

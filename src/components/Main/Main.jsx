@@ -8,7 +8,7 @@ import { SavedArticlesContext } from "../../contexts/SavedArticlesContext";
 import imageFondo from "../../images/image_fondo.png";
 
 function Main() {
-  const { handleSaveArticle, savedArticles } = useContext(SavedArticlesContext);
+  const { handleSaveArticle, savedArticles, setMovieError } = useContext(SavedArticlesContext);
   const [searchQuery, setSearchQuery] = useState("");
   const [status, setStatus] = useState("idle");
   const [articles, setArticles] = useState([]);
@@ -18,6 +18,7 @@ function Main() {
     e.preventDefault();
     setStatus("loading");
     setVisibleCount(3);
+    setMovieError("");
 
     api
       .getInfo(
@@ -39,8 +40,7 @@ function Main() {
           setStatus("loaded");
         }
       })
-      .catch((err) => {
-        console.error(err);
+      .catch(() => {
         setStatus("error");
       });
   }
