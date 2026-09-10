@@ -7,7 +7,7 @@ function Preloader({ status }) {
       {status === "loading" && (
         <div className="preloader__loading">
           <div className="preloader__spinner"></div>
-          <p className="preloader__text">Buscando noticias...</p>
+          <p className="preloader__text">Buscando películas...</p>
         </div>
       )}
 
@@ -16,12 +16,27 @@ function Preloader({ status }) {
           <img
             className="preloader__empty-icon"
             src={sadIcon}
-            alt="No se encontraron resulados"
+            alt="No se encontraron resultados"
           />
           <h3 className="preloader__empty-title">No se encontró nada</h3>
           <p className="preloader__empty-subtitle">
             Lo sentimos, pero no hay nada que coincida con tus términos de
             búsqueda
+          </p>
+        </div>
+      )}
+
+      {status === "error" && (
+        <div className="preloader__empty">
+          <img
+            className="preloader__empty-icon"
+            src={sadIcon}
+            alt="Error al buscar películas"
+          />
+          <h3 className="preloader__empty-title">Ocurrió un error</h3>
+          <p className="preloader__empty-subtitle">
+            Lo sentimos, ocurrió un error al buscar las películas. Inténtalo
+            nuevamente.
           </p>
         </div>
       )}

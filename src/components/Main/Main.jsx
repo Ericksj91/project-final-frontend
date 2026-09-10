@@ -8,7 +8,7 @@ import { SavedArticlesContext } from "../../contexts/SavedArticlesContext";
 import imageFondo from "../../images/image_fondo.png";
 
 function Main() {
-  const { handleSaveArticle, savedArticles } = useContext(SavedArticlesContext);
+  const { handleSaveArticle, savedArticles, setMovieError } = useContext(SavedArticlesContext);
   const [searchQuery, setSearchQuery] = useState("");
   const [status, setStatus] = useState("idle");
   const [articles, setArticles] = useState([]);
@@ -18,6 +18,7 @@ function Main() {
     e.preventDefault();
     setStatus("loading");
     setVisibleCount(3);
+    setMovieError("");
 
     api
       .getInfo(
@@ -27,7 +28,6 @@ function Main() {
         if (data.results.length === 0) {
           setStatus("empty");
         } else {
-          console.log(data.results[0]);
           const formattedArticles = data.results.map((item) => ({
             id: item.id,
             image: `https://image.tmdb.org/t/p/w500${item.poster_path}`,
@@ -40,8 +40,7 @@ function Main() {
           setStatus("loaded");
         }
       })
-      .catch((err) => {
-        console.error(err);
+      .catch(() => {
         setStatus("error");
       });
   }

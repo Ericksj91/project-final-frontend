@@ -11,15 +11,18 @@ function SearchResults({
   hasMore,
   visibleCount,
 }) {
-  const { handleSaveArticle, savedArticles } = useContext(SavedArticlesContext);
+  const { handleSaveArticle, savedArticles, movieError } =
+    useContext(SavedArticlesContext);
 
   return (
     <section className="search-results">
       {status !== "idle" && (
         <h2 className="search-results__title">Resultados de la busqueda</h2>
       )}
+      {movieError && <p className="search-results__error">{movieError}</p>}
       {status === "loading" && <Preloader status="loading" />}
       {status === "empty" && <Preloader status="empty" />}
+      {status === "error" && <Preloader status="error" />}
 
       {status === "loaded" && (
         <div className="search-results__grid">
@@ -30,7 +33,7 @@ function SearchResults({
               buttonType="save"
               onButtonClick={() => handleSaveArticle(article)}
               isSaved={savedArticles.some(
-                (eachArticle) => eachArticle.id === article.id,
+                (eachArticle) => eachArticle.movieId === article.id,
               )}
             />
           ))}
